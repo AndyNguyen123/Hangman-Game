@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hangman</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+<body>
+    <!--
+        Song: Eye of the Tiger 
+        layout with hangman title, theme pics,
+    body portion where the words visible
+        1. left section where pictures of correct guessed theme will be display
+        2. right portion:
+            header: Press Any Key to Get Started!
+            win/lose section displaying every round result
+        3. place holder for words to guess
+        4. number of guess remaining
+        5. letter already guess -->
+    <script>
+        // set one object variable for each keyword
+        falconHeavy = {
+        word: "falconheavy",
+        get wordArray () {
+            return this.word.split('');
+        },
+        // guess: function() {
+        //     var startGuess = 10;
+        //     console.log(this.word.split())
+        //     array.forEach(element => {
+                
+        //     });
+        // },
+        placeHolder: function() {
+            var unit = '';
+            for(i=0; i<this.word.length; i++) {
+                unit += '_ ';
+            }
+            return unit;
+        },
+        reveal: document.onkeyup = function() {
+            var input = event.key;
+            var originalHolder = '';
+            this.wordArray.forEach(function(element) {
+                if(input.toLowerCase() === element) {
+                    originalHolder += input.toLowerCase() + ' '; 
+                }
+                else {
+                    originalHolder += '_ ';
+                };
+                return originalHolder;
+            });
+        }
+        }
+        console.log(falconHeavy.word.length);
+        console.log(falconHeavy.wordArray);
+    </script>
+</body>
+</html>
