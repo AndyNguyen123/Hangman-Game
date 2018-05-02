@@ -24,25 +24,33 @@
         5. letter already guess -->
     <script>
         // set one object variable for each keyword
-        object = {
+        var object = {
             // list of keywords that the player will guess
-            word: ["falconheavy", "falconlight","tamara"],
+            word: ["falconheavy", "falconlight", "tamara"],
 
-            //split these keyword into each letter
-            get wordArray () {
-                var array = [];
-                this.word.forEach(function (element) {
-                    array.push(element.split(''));
-                });
-            return array;
+            // split these keywords into each letter
+            wordArray: function (randomWord) {
+                var letterArray = randomWord.split('');
+                return letterArray;
             },
-            
+
+            randomWordGenerator: function(array) {
+                var randomNum = Math.floor(Math.random() * array.length);
+
+                return array[randomNum];
+            },
+
+            // putting a place holder for the keyword
             placeHolder: function () {
-                var unit = '';
-                for (i = 0; i < this.word.length; i++) {
-                    unit += '_ ';
-                }
-                return unit;
+                var array = [];
+                this.wordArray().forEach(function (element) {
+                    var unit = '';
+                    element.forEach(function (letter) {
+                        unit += '_ ';
+                    });
+                    array.push(unit);
+                });
+                return array;
             },
             reveal: document.onkeyup = function () {
                 var input = event.key;
@@ -58,9 +66,14 @@
                 });
             }
         }
-        console.log(object.word);
-        console.log(object.wordArray);
+        // console.log(object.word);
+        // console.log(object.wordArray());
+        // console.log(object.placeHolder());
+        // console.log(object.wordArray()[0]);
+
+        var blah = object.randomWordGenerator(object.word);
+        console.log('random word: ',blah);
     </script>
 </body>
 
-</html>
+</html>s
