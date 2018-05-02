@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Hangman</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
 </head>
+
 <body>
     <!--
         Song: Eye of the Tiger 
@@ -21,41 +24,43 @@
         5. letter already guess -->
     <script>
         // set one object variable for each keyword
-        falconHeavy = {
-        word: "falconheavy",
-        get wordArray () {
-            return this.word.split('');
-        },
-        // guess: function() {
-        //     var startGuess = 10;
-        //     console.log(this.word.split())
-        //     array.forEach(element => {
-                
-        //     });
-        // },
-        placeHolder: function() {
-            var unit = '';
-            for(i=0; i<this.word.length; i++) {
-                unit += '_ ';
-            }
-            return unit;
-        },
-        reveal: document.onkeyup = function() {
-            var input = event.key;
-            var originalHolder = '';
-            this.wordArray.forEach(function(element) {
-                if(input.toLowerCase() === element) {
-                    originalHolder += input.toLowerCase() + ' '; 
+        object = {
+            // list of keywords that the player will guess
+            word: ["falconheavy", "falconlight","tamara"],
+
+            //split these keyword into each letter
+            get wordArray () {
+                var array = [];
+                this.word.forEach(function (element) {
+                    array.push(element.split(''));
+                });
+            return array;
+            },
+            
+            placeHolder: function () {
+                var unit = '';
+                for (i = 0; i < this.word.length; i++) {
+                    unit += '_ ';
                 }
-                else {
-                    originalHolder += '_ ';
-                };
-                return originalHolder;
-            });
+                return unit;
+            },
+            reveal: document.onkeyup = function () {
+                var input = event.key;
+                var originalHolder = '';
+                this.wordArray.forEach(function (element) {
+                    if (input.toLowerCase() === element) {
+                        originalHolder += input.toLowerCase() + ' ';
+                    }
+                    else {
+                        originalHolder += '_ ';
+                    };
+                    return originalHolder;
+                });
+            }
         }
-        }
-        console.log(falconHeavy.word.length);
-        console.log(falconHeavy.wordArray);
+        console.log(object.word);
+        console.log(object.wordArray);
     </script>
 </body>
+
 </html>
