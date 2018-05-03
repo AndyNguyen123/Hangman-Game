@@ -23,57 +23,62 @@
         4. number of guess remaining
         5. letter already guess -->
     <script>
-        // set one object variable for each keyword
-        var object = {
-            // list of keywords that the player will guess
-            word: ["falconheavy", "falconlight", "tamara"],
+        
+        var words = ["falconheavy", "tesla", "openai", "hyperloop"];
+        var imagesUrl = ["url1", "url2", "url3", "url4"];
+        var guesses = [];
+        var chosenWord = '';
+        let maxGuesses = 10;
+        var gameObject = {
+            words,
+            imagesUrl,
+            guesses,
+            chosenWord,
+        };
 
-            // split these keywords into each letter
-            wordArray: function (randomWord) {
-                var letterArray = randomWord.split('');
-                return letterArray;
-            },
+        var pickRandomWord = (words) => { return words[Math.floor(Math.random() * words.length)]; };
+        var convertToPlaceholder = (word) => { return word.split('').map(char => '_').join(''); };
+        var addSpacesBetween = (word) => { return word.split('').join(' '); };
+        var removeSpacesBetween = (word) => { return word.split(' ').join(''); };
+        var removeSpacesBetweenOther = word => word.split(' ').join('');
 
-            randomWordGenerator: function(array) {
-                var randomNum = Math.floor(Math.random() * array.length);
+        gameObject.chosenWord = pickRandomWord(gameObject.words);
+        gameObject.display = addSpacesBetween(convertToPlaceHolder(gameObject.chosenWord));
 
-                return array[randomNum];
-            },
+        var checkGuess = (chosenWord, charGuess) => {
+            return chosenWord.indexOf(charGuess);
+        };
 
-            // putting a place holder for the keyword
-            placeHolder: function () {
-                var array = [];
-                this.wordArray().forEach(function (element) {
-                    var unit = '';
-                    element.forEach(function (letter) {
-                        unit += '_ ';
-                    });
-                    array.push(unit);
-                });
-                return array;
-            },
-            reveal: document.onkeyup = function () {
-                var input = event.key;
-                var originalHolder = '';
-                this.wordArray.forEach(function (element) {
-                    if (input.toLowerCase() === element) {
-                        originalHolder += input.toLowerCase() + ' ';
-                    }
-                    else {
-                        originalHolder += '_ ';
-                    };
-                    return originalHolder;
-                });
+        var checkWin = (displayString, chosenWord) => {
+            return removeSpacesBetween(displayString) === chosenWord;
+        };
+
+        document.onkeyup = function () {
+            var inputChar = event.key
+            var guessInd = checkGuess(gameObject.chosenWord, inputChar);
+            gameObject.guesses.push(inputChar);
+
+            if (guessInd === -1) {
+                // guessed wrong
+                // call w/e function that happens when guess is wrong
+            } else {
+                // guessed correctly
+                let displayCopy = gameObject.display.split(' ');
+                displayCopy[guessInd] = gameObject.chosenWord[guessInd]; /
+                gameObject.display = addSpacesBetween(displayCopy); 
+                maxGuesses++;
+                // execute rendering
+            }
+            // var newHolder = object.holder.map(x => input);
+            // console.log(newHolder);
+            if (checkWin(gameObject.display, gameObject.chosenWord)) {
+               
+            } else if (gameObject.guesses.length === maxGuesses) {
+               
             }
         }
-        // console.log(object.word);
-        // console.log(object.wordArray());
-        // console.log(object.placeHolder());
-        // console.log(object.wordArray()[0]);
 
-        var blah = object.randomWordGenerator(object.word);
-        console.log('random word: ',blah);
     </script>
 </body>
 
-</html>s
+</html>
