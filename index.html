@@ -8,75 +8,79 @@
     <title>Hangman</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
         crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
-    <!--
-        Song: Eye of the Tiger 
-        layout with hangman title, theme pics,
-    body portion where the words visible
-        1. left section where pictures of correct guessed theme will be display
-        2. right portion:
-            header: Press Any Key to Get Started!
-            win/lose section displaying every round result
-        3. place holder for words to guess
-        4. number of guess remaining
-        5. letter already guess -->
+    <header>
+        <h1>
+            Hipman
+        </h1>
+    </header>
+
+    <section class="container-fluid">
+        <div>
+            PRESS ANY KEY TO GET STARTED!
+        </div>
+        <div>
+            Current Word
+        </div>
+        <div id="placeHolder"></div>
+    </section>
+
     <script>
-        
-        var words = ["falconheavy", "tesla", "openai", "hyperloop"];
-        var imagesUrl = ["url1", "url2", "url3", "url4"];
-        var guesses = [];
-        var chosenWord = '';
-        let maxGuesses = 10;
-        var gameObject = {
+        const words = ["copper", "skateboard", "fanny", "kickstarter", "typewriter", "selfies", "fingerstache", "etsy"];
+        const imagesUrl = ["url1", "url2", "url3", "url4"];
+        const guesses = [];
+        const chosenWord = '';
+        let remainGuesses = 10;
+        const gameObject = {
             words,
             imagesUrl,
             guesses,
             chosenWord,
+            remainGuesses,
         };
 
-        var pickRandomWord = (words) => { return words[Math.floor(Math.random() * words.length)]; };
-        var convertToPlaceholder = (word) => { return word.split('').map(char => '_').join(''); };
-        var addSpacesBetween = (word) => { return word.split('').join(' '); };
-        var removeSpacesBetween = (word) => { return word.split(' ').join(''); };
-        var removeSpacesBetweenOther = word => word.split(' ').join('');
+        const pickRandomWord = (word) => { return word[Math.floor(Math.random() * word.length)]; };
+        const splitToArray = (word) => { return word.split(''); };
 
+        //choose a random word in the words array to play
         gameObject.chosenWord = pickRandomWord(gameObject.words);
-        gameObject.display = addSpacesBetween(convertToPlaceHolder(gameObject.chosenWord));
+        console.log('Chosen Word: ' + gameObject.chosenWord);
+        //create a display holder
+        gameObject.displayHolder = gameObject.chosenWord.split('').map(char => '_');
+        console.log('Display Holder: ' + gameObject.displayHolder);
 
-        var checkGuess = (chosenWord, charGuess) => {
-            return chosenWord.indexOf(charGuess);
-        };
+        document.onkeyup = () => {
+            let inputChar = event.key;
 
-        var checkWin = (displayString, chosenWord) => {
-            return removeSpacesBetween(displayString) === chosenWord;
-        };
-
-        document.onkeyup = function () {
-            var inputChar = event.key
-            var guessInd = checkGuess(gameObject.chosenWord, inputChar);
-            gameObject.guesses.push(inputChar);
-
-            if (guessInd === -1) {
-                // guessed wrong
-                // call w/e function that happens when guess is wrong
-            } else {
-                // guessed correctly
-                let displayCopy = gameObject.display.split(' ');
-                displayCopy[guessInd] = gameObject.chosenWord[guessInd]; /
-                gameObject.display = addSpacesBetween(displayCopy); 
-                maxGuesses++;
-                // execute rendering
+            //logging the letter that the player guesses
+            if (guesses.indexOf(inputChar) === -1) {
+                guesses.push(inputChar);
             }
-            // var newHolder = object.holder.map(x => input);
-            // console.log(newHolder);
-            if (checkWin(gameObject.display, gameObject.chosenWord)) {
-               
-            } else if (gameObject.guesses.length === maxGuesses) {
-               
+
+            //check the player input against the chosen word then update the display holder
+            for (let i = 0; i < splitToArray(gameObject.chosenWord).length; i++) {
+                if (inputChar.toLowerCase() === splitToArray(gameObject.chosenWord)[i]) {
+                    gameObject.displayHolder[i] = inputChar;
+                }
             }
+
+            //Decrease number of guesses if the player guessed wrong
+            if (splitToArray(gameObject.chosenWord).indexOf(inputChar) === -1) {
+                remainGuesses--;
+            }
+            console.log('Guesses array: ' + guesses);
+            console.log('Display Holder ' + gameObject.displayHolder);
+            console.log('Remain Guesses ' + remainGuesses);
+
+        $("#placeHolder").html(gameObject.displayHolder.join(' '));
+
+            if()
         }
+
+        $(document).ready = () => { $("#placeHolder").html(gameObject.displayHolder.join(' '));};
 
     </script>
 </body>
