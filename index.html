@@ -8,35 +8,44 @@
     <title>Hangman</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
         crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here|Waiting+for+the+Sunrise" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 </head>
 
 <body>
+    <audio id="audio" src="./sounds/soundtrack.mp3" autoplay="autoplay" loop="loop"></audio>
     <header>
         <h1>
-            Hipman
+            hipman
         </h1>
     </header>
 
     <section class="container-fluid">
         <div>
-            PRESS ANY KEY TO GET STARTED!
+            please press any key to get started!
         </div>
         <div>
-            Current Word
-        </div>
+            current word
         <div id="placeHolder"></div>
+
+        <section id="charGuess">
+            <div>
+                you've guessed:
+            </div>
+            <div id="letterGuessed"></div>
+        </section>
     </section>
 
     <script>
         const words = ["copper", "skateboard", "fanny", "kickstarter", "typewriter", "selfies", "fingerstache", "etsy"];
-        const imagesUrl = ["url1", "url2", "url3", "url4"];
-        const guesses = [];
         const chosenWord = '';
+        let guesses = [];
         let remainGuesses = 10;
+        let correctWordGuessed = 0;
         const gameObject = {
             words,
-            imagesUrl,
             guesses,
             chosenWord,
             remainGuesses,
@@ -52,7 +61,7 @@
         gameObject.displayHolder = gameObject.chosenWord.split('').map(char => '_');
         console.log('Display Holder: ' + gameObject.displayHolder);
 
-        document.onkeyup = () => {
+        $(document).onkeyup = () => {
             let inputChar = event.key;
 
             //logging the letter that the player guesses
@@ -71,16 +80,23 @@
             if (splitToArray(gameObject.chosenWord).indexOf(inputChar) === -1) {
                 remainGuesses--;
             }
+
+            //move to next random word
+            if (gameObject.displayHolder.join('') === gameObject.chosenWord) {
+                correctWordGuessed++;
+                gameObject.chosenWord = pickRandomWord(gameObject.words);
+                gameObject.displayHolder = gameObject.chosenWord.split('').map(char => '_');
+                guesses = [];
+            }
+
+            $("#placeHolder").html(gameObject.displayHolder.join(' '));
+            $("#letterGuessed").html(guesses.map(char => char + ', '));
             console.log('Guesses array: ' + guesses);
             console.log('Display Holder ' + gameObject.displayHolder);
             console.log('Remain Guesses ' + remainGuesses);
-
-        $("#placeHolder").html(gameObject.displayHolder.join(' '));
-
-            if()
         }
 
-        $(document).ready = () => { $("#placeHolder").html(gameObject.displayHolder.join(' '));};
+        $("#placeHolder").html(gameObject.displayHolder.join(' '));
 
     </script>
 </body>
