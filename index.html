@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <audio id="audio" src="./sounds/soundtrack.mp3" autoplay="autoplay" loop="loop"></audio>
+    <!-- <audio id="audio" src="./sounds/soundtrack.mp3" autoplay="autoplay" loop="loop"></audio> -->
     <header>
         <h1>
             hipman
@@ -28,14 +28,15 @@
         </div>
         <div>
             current word
+        </div>
         <div id="placeHolder"></div>
 
         <section id="charGuess">
-            <div>
-                you've guessed:
-            </div>
+
             <div id="letterGuessed"></div>
         </section>
+
+        <div id="remainGuesses"></div>
     </section>
 
     <script>
@@ -51,9 +52,9 @@
             remainGuesses,
         };
 
+
         const pickRandomWord = (word) => { return word[Math.floor(Math.random() * word.length)]; };
         const splitToArray = (word) => { return word.split(''); };
-
         //choose a random word in the words array to play
         gameObject.chosenWord = pickRandomWord(gameObject.words);
         console.log('Chosen Word: ' + gameObject.chosenWord);
@@ -61,8 +62,9 @@
         gameObject.displayHolder = gameObject.chosenWord.split('').map(char => '_');
         console.log('Display Holder: ' + gameObject.displayHolder);
 
-        $(document).onkeyup = () => {
+        document.onkeyup = () => {
             let inputChar = event.key;
+            console.log('input ' + inputChar);
 
             //logging the letter that the player guesses
             if (guesses.indexOf(inputChar) === -1) {
@@ -78,7 +80,8 @@
 
             //Decrease number of guesses if the player guessed wrong
             if (splitToArray(gameObject.chosenWord).indexOf(inputChar) === -1) {
-                remainGuesses--;
+                gameObject.remainGuesses--;
+                console.log('remainguesses ' + remainGuesses);
             }
 
             //move to next random word
@@ -90,13 +93,15 @@
             }
 
             $("#placeHolder").html(gameObject.displayHolder.join(' '));
-            $("#letterGuessed").html(guesses.map(char => char + ', '));
+            $("#letterGuessed").html("you've guessed: " + guesses.map(char => ' ' + char));
             console.log('Guesses array: ' + guesses);
             console.log('Display Holder ' + gameObject.displayHolder);
-            console.log('Remain Guesses ' + remainGuesses);
+            $("#remainGuesses").html("remain guesses: " + gameObject.remainGuesses);
         }
 
+        $("#letterGuessed").html("you've guessed: " + guesses.map(char => ' ' + char));
         $("#placeHolder").html(gameObject.displayHolder.join(' '));
+        $("#remainGuesses").html("remain guesses: " + gameObject.remainGuesses);
 
     </script>
 </body>
