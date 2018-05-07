@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hangman</title>
+    <title>hipman</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
         crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here|Waiting+for+the+Sunrise" rel="stylesheet">
@@ -14,8 +14,8 @@
 
 </head>
 
-<body>
-    <!-- <audio id="audio" src="./sounds/soundtrack.mp3" autoplay="autoplay" loop="loop"></audio> -->
+<body class="normal">
+    <audio id="audio" src="./sounds/soundtrack2.mp3" autoplay="autoplay" loop="loop"></audio>
     <header>
         <h1>
             hipman
@@ -26,30 +26,33 @@
         <div>
             please press any key to get started!
         </div>
-        <div>
-            current word
-        </div>
+        <div>current word</div>
         <div id="placeHolder"></div>
-
-        <section id="charGuess">
-
-            <div id="letterGuessed"></div>
-        </section>
-
+        <div id="wordGuessed"></div>
+        <div id="letterGuessed"></div>
         <div id="remainGuesses"></div>
+        <div id="gameOverMessage">
+            <p>
+                you've ran out of guesses
+            </p>
+            <p>
+                please refresh the page to restart the game
+            </p>
+        </div>
     </section>
 
     <script>
         const words = ["copper", "skateboard", "fanny", "kickstarter", "typewriter", "selfies", "fingerstache", "etsy"];
         const chosenWord = '';
-        let guesses = [];
-        let remainGuesses = 10;
-        let correctWordGuessed = 0;
+        let letterGuessed = [];
+        let remainGuesses = 15;
+        let wordGuessed = 0;
         const gameObject = {
             words,
-            guesses,
+            letterGuessed,
             chosenWord,
             remainGuesses,
+            wordGuessed,
         };
 
 
@@ -67,41 +70,53 @@
             console.log('input ' + inputChar);
 
             //logging the letter that the player guesses
-            if (guesses.indexOf(inputChar) === -1) {
-                guesses.push(inputChar);
+            if (gameObject.letterGuessed.indexOf(inputChar.toLowerCase()) === -1 && event.keyCode < 91 && event.keyCode > 64) {
+                gameObject.letterGuessed.push(inputChar.toLowerCase());
             }
 
             //check the player input against the chosen word then update the display holder
             for (let i = 0; i < splitToArray(gameObject.chosenWord).length; i++) {
                 if (inputChar.toLowerCase() === splitToArray(gameObject.chosenWord)[i]) {
-                    gameObject.displayHolder[i] = inputChar;
+                    gameObject.displayHolder[i] = inputChar.toLowerCase();
                 }
             }
 
             //Decrease number of guesses if the player guessed wrong
-            if (splitToArray(gameObject.chosenWord).indexOf(inputChar) === -1) {
+            if (splitToArray(gameObject.chosenWord).indexOf(inputChar.toLowerCase()) === -1 && event.keyCode < 91 && event.keyCode > 64) {
                 gameObject.remainGuesses--;
-                console.log('remainguesses ' + remainGuesses);
+                console.log('remainguesses ' + gameObject.remainGuesses);
             }
-
+            
             //move to next random word
             if (gameObject.displayHolder.join('') === gameObject.chosenWord) {
-                correctWordGuessed++;
+                gameObject.wordGuessed++;
+                gameObject.letterGuessed.splice(0, gameObject.letterGuessed.length);
                 gameObject.chosenWord = pickRandomWord(gameObject.words);
                 gameObject.displayHolder = gameObject.chosenWord.split('').map(char => '_');
-                guesses = [];
+
             }
 
+            //lose condition
+            if (gameObject.remainGuesses < 1) {
+
+                $("#gameOverMessage").show();
+                $("<body>").removeClass("normal").addClass("dimBackGround");
+                return;
+            }
+            
             $("#placeHolder").html(gameObject.displayHolder.join(' '));
-            $("#letterGuessed").html("you've guessed: " + guesses.map(char => ' ' + char));
-            console.log('Guesses array: ' + guesses);
-            console.log('Display Holder ' + gameObject.displayHolder);
+            $("#wordGuessed").html('word guessed: ' + gameObject.wordGuessed);
+            $("#letterGuessed").html("letter guessed: " + letterGuessed.map(char => ' ' + char));
             $("#remainGuesses").html("remain guesses: " + gameObject.remainGuesses);
+            console.log('Guesses array: ' + gameObject.letterGuessed);
+            console.log('Display Holder ' + gameObject.displayHolder);
         }
 
-        $("#letterGuessed").html("you've guessed: " + guesses.map(char => ' ' + char));
         $("#placeHolder").html(gameObject.displayHolder.join(' '));
+        $("#wordGuessed").html('word guessed: ' + gameObject.wordGuessed);
+        $("#letterGuessed").html("letter guessed: " + letterGuessed.map(char => ' ' + char));
         $("#remainGuesses").html("remain guesses: " + gameObject.remainGuesses);
+        $("#gameOverMessage").hide();
 
     </script>
 </body>
