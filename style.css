@@ -11,12 +11,12 @@
   url("./images/hmbg.jpg")
 }
 .dimBackGround {
-    font-family: 'Just Me Again Down Here', cursive;
+  background:
+  linear-gradient(
+      rgba(0, 0, 0, 0.7), 
+      rgba(0, 0, 0, 0.7)
+    ),
+    url("./images/hmbg.jpg");
+  font-family: 'Just Me Again Down Here', cursive;
   font-size: 40px;
-  background: 
-  url("./images/hmbg.jpg")
- linear-gradient(
-rgba(0, 0, 0, 0.7), 
-rgba(0, 0, 0, 0.7)
-),
 }
